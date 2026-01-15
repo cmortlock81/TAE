@@ -41,6 +41,38 @@ tedious_engine/
 │
 └── requirements.txt
 
+## Docker Compose (local development)
+
+Start the stack:
+
+```bash
+docker compose up --build
+```
+
+Create a superuser:
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
+Run migrations manually:
+
+```bash
+docker compose exec web python manage.py migrate
+```
+
+Run the invoice processing command:
+
+```bash
+docker compose exec web python manage.py process_invoice --help
+```
+
+The app is available at:
+
+```
+http://localhost:8000
+```
+
 """
 Tedious Engine v3.2
 Deterministic Invoice Extraction Engine
