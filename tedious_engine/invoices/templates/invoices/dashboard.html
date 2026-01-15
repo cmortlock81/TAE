@@ -1,0 +1,91 @@
+{% extends "invoices/base.html" %}
+
+{% block title %}Dashboard | Tedious Engine{% endblock %}
+
+{% block content %}
+<section class="panel upload-panel">
+    <div class="panel-header">
+        <h2>Upload Invoice</h2>
+        <span class="muted">PDF only</span>
+    </div>
+    <form class="upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="file-input">
+            <span>Select file</span>
+            <input type="file" name="invoice_file" accept="application/pdf">
+        </label>
+        <button class="button" type="submit">Upload &amp; Process</button>
+    </form>
+</section>
+
+<section class="grid">
+    <article class="card">
+        <h2>Suppliers</h2>
+        <p class="metric">{{ totals.suppliers }}</p>
+        <p class="muted">Total supplier profiles onboarded.</p>
+    </article>
+    <article class="card">
+        <h2>Invoices</h2>
+        <p class="metric">{{ totals.invoices }}</p>
+        <p class="muted">Tracked invoices across all vendors.</p>
+    </article>
+    <article class="card">
+        <h2>Processing Runs</h2>
+        <p class="metric">{{ totals.processing_runs }}</p>
+        <p class="muted">Engine executions completed.</p>
+    </article>
+    <article class="card highlight">
+        <h2>Total Gross</h2>
+        <p class="metric">{{ total_gross }}</p>
+        <p class="muted">Gross value across recorded invoices.</p>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Processing Health</h2>
+        <a class="link" href="/admin/invoices/processingrun/">View runs</a>
+    </div>
+    <div class="status-grid">
+        {% if status_summary %}
+            {% for item in status_summary %}
+                <div class="status-card">
+                    <p class="status-label">{{ item.label }}</p>
+                    <p class="status-count">{{ item.count }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No processing runs recorded yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Recent Invoices</h2>
+        <a class="link" href="/admin/invoices/invoice/">Manage invoices</a>
+    </div>
+    <div class="table">
+        <div class="table-header">
+            <span>Reference</span>
+            <span>Supplier</span>
+            <span>Created</span>
+            <span>Total</span>
+        </div>
+        {% if recent_invoices %}
+            {% for invoice in recent_invoices %}
+                <div class="table-row">
+                    <span>{{ invoice.external_reference }}</span>
+                    <span>{{ invoice.supplier.name }}</span>
+                    <span>{{ invoice.created_at|date:"M d, Y" }}</span>
+                    <span>{{ invoice.total_gross|default:"—" }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="table-row empty">
+                <span>No invoices to show yet.</span>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
