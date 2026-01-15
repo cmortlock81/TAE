@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Tedious Engine{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'invoices/styles.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <div>
+                <p class="eyebrow">Tedious Engine</p>
+                <h1 class="title">Invoice Operations Console</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="/">Dashboard</a>
+                <a href="/admin/">Admin</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message message-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+        <div class="container">
+            <p>Need deeper controls? Visit the <a href="/admin/">admin interface</a>.</p>
+        </div>
+    </footer>
+</body>
+</html>
