@@ -42,7 +42,7 @@ stack_response=$(curl -sS -w "\n%{http_code}" "${PORTAINER_URL}/api/stacks/${POR
   -H "${auth_header[0]}")
 stack_body=$(echo "$stack_response" | head -n 1)
 stack_code=$(echo "$stack_response" | tail -n 1)
-if [[ "$stack_code" != "200" ]]; then
+if [[ ! "$stack_code" =~ ^2 ]]; then
   echo "Failed to fetch stack details (status ${stack_code})" >&2
   exit 1
 fi
@@ -52,7 +52,7 @@ file_response=$(curl -sS -w "\n%{http_code}" "${PORTAINER_URL}/api/stacks/${PORT
   -H "${auth_header[0]}")
 file_body=$(echo "$file_response" | head -n 1)
 file_code=$(echo "$file_response" | tail -n 1)
-if [[ "$file_code" != "200" ]]; then
+if [[ ! "$file_code" =~ ^2 ]]; then
   echo "Failed to fetch stack file (status ${file_code})" >&2
   exit 1
 fi
@@ -89,7 +89,7 @@ update_response=$(curl -sS -w "\n%{http_code}" -X PUT \
   -H "${auth_header[0]}" \
   -d "$update_payload")
 update_code=$(echo "$update_response" | tail -n 1)
-if [[ "$update_code" != "200" ]]; then
+if [[ ! "$update_code" =~ ^2 ]]; then
   echo "Portainer stack update failed (status ${update_code})" >&2
   exit 1
 fi
