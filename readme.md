@@ -73,6 +73,30 @@ The app is available at:
 http://localhost:8000
 ```
 
+## CI/CD Deployment
+
+This repository ships a GitHub Actions workflow that builds and pushes a Docker image to GHCR, then updates the Portainer stack to use the new image tag.
+
+### Required GitHub Secrets
+
+- `PORTAINER_URL`: Portainer API base URL (e.g. `https://server:9443`). Do **not** use the Plesk `/modules/docker/portainer/...` UI path.
+- `PORTAINER_API_KEY` (recommended) **or** `PORTAINER_USERNAME` + `PORTAINER_PASSWORD`
+- `PORTAINER_STACK_ID`: Numeric stack ID to update
+- `PORTAINER_ENDPOINT_ID`: Numeric endpoint/environment ID (local is often `1`)
+
+### Finding `stackId` and `endpointId` in Portainer
+
+- Stack ID: open the stack in Portainer and check the URL path (e.g. `/#!/stacks/12` → `12`).
+- Endpoint ID: open **Environments** and select the target environment; the ID is shown in the URL (e.g. `/#!/endpoints/1` → `1`).
+
+### Manual runs
+
+Use **Actions → Deploy → Run workflow** in GitHub to deploy on demand.
+
+### Automatic runs
+
+Every push to `main` builds `ghcr.io/cmortlock81/tae:latest` and `ghcr.io/cmortlock81/tae:<shortsha>`, then updates the Portainer stack image to the new `<shortsha>` tag.
+
 """
 Tedious Engine v3.2
 Deterministic Invoice Extraction Engine
