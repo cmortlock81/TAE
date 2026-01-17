@@ -75,12 +75,12 @@ http://localhost:8000
 
 ## CI/CD Deployment
 
-This repository ships a GitHub Actions workflow that builds and pushes a Docker image to GHCR, then updates the Portainer stack to use the new image tag.
+This repository ships a GitHub Actions workflow that builds and pushes a Docker image to GHCR, then updates the Portainer stack to use the new image tag. The production stack should reference the GHCR image (no local `build:`) so Portainer can pull the updated tag.
 
 ### Required GitHub Secrets
 
 - `PORTAINER_URL`: Portainer API base URL (e.g. `https://server:9443`). Do **not** use the Plesk `/modules/docker/portainer/...` UI path.
-- `PORTAINER_API_KEY` (recommended) **or** `PORTAINER_USERNAME` + `PORTAINER_PASSWORD`
+- `PORTAINER_API_KEY` (recommended) **or** `PORTAINER_USERNAME` + `PORTAINER_PASSWORD` (used to request a JWT)
 - `PORTAINER_STACK_ID`: Numeric stack ID to update
 - `PORTAINER_ENDPOINT_ID`: Numeric endpoint/environment ID (local is often `1`)
 
@@ -95,7 +95,7 @@ Use **Actions → Deploy → Run workflow** in GitHub to deploy on demand.
 
 ### Automatic runs
 
-Every push to `main` builds `ghcr.io/cmortlock81/tae:latest` and `ghcr.io/cmortlock81/tae:<shortsha>`, then updates the Portainer stack image to the new `<shortsha>` tag.
+Every push to `main` builds `ghcr.io/cmortlock81/tae:latest` and `ghcr.io/cmortlock81/tae:<shortsha>`, then updates the Portainer stack image to the new `<shortsha>` tag and triggers a redeploy.
 
 """
 Tedious Engine v3.2
